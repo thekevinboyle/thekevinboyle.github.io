@@ -1,0 +1,166 @@
+/* styles for wedding */
+body {
+	text-align: center;
+	font-family: "Raleway", sans-serif;
+	font-size: 1.5rem;
+} 
+
+h1,
+h2,
+h3 {
+	font-family: "santelia_rough_altbold", sans-serif; 
+	color: inherit;
+}
+
+h1 {
+	font-size: 4rem; 
+	margin-bottom: 1rem;
+}
+
+.connector {
+	font-family: "Raleway", sans-serif;
+	font-size: 1.5rem;
+	text-transform: uppercase;
+	font-weight: bold;
+	display: block;
+}
+
+h2 { 
+	font-size: 2.5rem;
+}
+
+h3 {
+	font-size: 3rem;
+	margin-bottom: .75rem;
+}
+
+p{
+	margin: 0 0 1.9rem 0;
+	line-height: 1.5;
+}
+
+img {
+	max-width: 100%;
+}
+
+/* framing */
+
+.row { 
+	width: 100%;
+	max-width: 26em;
+	margin: 0 auto;
+}
+
+.chunk {
+	padding: 0 1.25rem;
+}
+
+.wedding__hero {
+	background: maroon url(../images/Header-Photo.jpg) no-repeat center center;
+	background-size: cover;
+	background-attachment: fixed;
+	color: #ffffff;
+	min-height: 700px;
+	position: relative;
+}
+.wedding__intro {
+	bottom: 2rem;
+	position: absolute;
+	left: 0;
+	right: 0;
+}
+
+.wedding__copy {
+	color: #701933;
+}
+
+/* Photos and Illies */
+.photo {
+	background: pink url(none) no-repeat center center;
+	background-size: cover;
+	min-height: 350px;
+}
+
+.photo__romance {
+	background-image: url(../images/Hashtag.jpg);
+}
+
+.wide {
+	width: 100%;
+	margin: 0 auto;
+}
+
+.illy {
+	padding: 0 1.25rem;
+}
+
+
+
+/* Horizontal Rules */
+
+.banner {
+	border: 0;
+}
+
+.banner.lovely {
+	background: transparent url(../images/Heart-divider.png) no-repeat center center;
+	background-size: auto; 
+	max-width: 640px;
+	height: 23px;
+
+}
+
+/* Form elements */
+.button {
+	padding: 1rem 1.7rem;
+	border: 0;
+	font-size: 1rem;
+	border-radius: 5px;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.button--green {
+	color: white;
+	background-color: #18aa8e;
+}
+
+.button--orange {
+	color: white;
+	background-color: #18aa8e;
+}
+
+/* Helpers */
+.py3 {
+	padding-top: 3rem;
+	padding-bottom: 3rem;
+}
+
+.mb3 {
+	margin-bottom: 3rem;
+}
+
+.mt3 {
+	margin-top: 3rem;
+}
+
+/* Footer */
+
+.wedding__footer {
+	background: #18aa8e;
+	height: 50px;
+	color: white;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.nav__item {
+	color: inherit;
+	text-decoration: none;
+	line-height: 50px;
+	font-weight: bold;
+	text-transform: uppercase;
+	margin: 0 1rem;
+}
