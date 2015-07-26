@@ -1,0 +1,169 @@
+body {
+	font-family: sans-serif;
+
+}
+
+/* Typography */
+
+h1,
+h2,
+h3 {
+	color: inherit;
+}
+
+h1,
+h3 {
+	font-family: "santelia_rough_altbold", sans-serif;
+}
+
+h1 {
+	font-size: 4rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}
+
+h3 {
+	font-size: 3rem;
+	margin-bottom: .75rem;
+}
+
+p {
+	margin: 0 0 1.5rem 0;
+}
+
+/* Decoration */
+
+img {
+	max-width: 100%;
+}
+
+.deco {
+	border: 0;
+}
+
+.arrow {
+	background: transparent url(../images/Heart-divider.png) no-repeat center center;
+	background-size: cover;
+	width: 100%;
+	max-width: 640px;
+	height: 23px;
+}
+
+.illy {
+	background: transparent url(none) no-repeat center center;
+	background-size: cover;
+
+
+}
+
+.illy__hashtag {
+	background-image: url(../images/Hashtag.jpg);
+	height: 200px;
+	margin-bottom: 45px;
+}
+
+/* Button */
+
+.button {
+	background-color: gray;
+	border-radius: 4px;
+	border: 0;
+	color: #FFF;
+	font-weight: bold;
+	padding: .75rem 1.5rem;
+
+}
+
+.button--teal {
+	background-color: teal;
+}
+
+/* Framing */
+
+
+
+.wedding {
+	text-align: center;
+}
+
+.hero {
+	background: transparent url(../images/Header-Photo.jpg) no-repeat center center;
+	background-size: cover;
+	background-attachment: fixed;
+	min-height: 500px;
+	color: #FFF;
+	position: relative;
+}
+
+.wedding__intro {
+	bottom: 2rem;
+	left: 0;
+	right: 0;
+	position: absolute;
+	
+}
+
+.wedding__content {
+	color: maroon;
+}
+
+.info {
+	padding: 3rem 0;
+}
+
+.bounds {
+	width: 100%;
+	max-width: 26em;
+	margin: 0 auto;
+}
+/* Footer */
+
+.wedding__footer {
+	background-color: teal;
+	color: white;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.wedding__footer__nav {
+	margin: 0 auto;
+	padding: 1rem 0;
+}
+
+.wedding__footer__nav__item {
+	color: inherit;
+	margin: 0 .75rem;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-weight: bolder;
+}
+
+.wedding__footer__nav__item:hover {
+	opacity: .75;
+	transition: all .5s ease-in-out;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
