@@ -12,25 +12,21 @@ var reload = browserSync.reload;
 var through2 = require('through2');
 var browserify = require('browserify');
 
+var sass = require('gulp-sass');
+
 gulp.task('stylesheet', ['sprites'], function () {
-  return gulp.src('app/css/main.scss')
-    .pipe($.sourcemaps.init())
-    .pipe($.sass({
-      outputStyle: 'nested', // libsass doesn't support expanded yet
-      precision: 10,
-      includePaths: ['.'],
-      onError: console.error.bind(console, 'Sass error:')
-    }))
-    .on('error', function (error) {
-      console.log(error.stack);
-      this.emit('end');
-    })
-    .pipe($.postcss([
-      require('autoprefixer-core')({browsers: ['last 1 version']})
-    ]))
-    .pipe($.sourcemaps.write())
-    .pipe(gulp.dest('.tmp/css'))
-    .pipe(reload({stream: true}));
+    gulp.src('app/**/*.scss')
+      .pipe(sass().on('error', sass.logError))
+      .pipe(gulp.dest('app.stylehsheets'))
+    //.pipe(reload({stream: true}));
+});
+
+
+gulp.task('sass', function () {
+      gulp.src('./sass/**/*.scss')
+          .pipe(sass().on('error', sass.logError))
+              .pipe(gulp.dest('./css'));
+
 });
 
 gulp.task('sprites', function() {
@@ -55,7 +51,7 @@ gulp.task('sprites', function() {
 
     // Pipe CSS stream
     spriteData.css
-      .pipe(gulp.dest('app/css/sprites'));
+      .pipe(gulp.dest('app/scss/sprites'));
   }
 });
 
@@ -155,7 +151,7 @@ gulp.task('serve', ['stylesheet', 'javascript', 'fonts'], function () {
     '.tmp/fonts/**/*'
   ]).on('change', reload);
 
-  gulp.watch(['app/css/**/*.scss', '!app/css/sprites/*.scss'], ['stylesheet']);
+  gulp.watch(['app/scss/**/*.scss', '!app/scss/sprites/*.scss'], ['stylesheet']);
   gulp.watch('app/js/**/*.js', ['javascript']);
   gulp.watch('app/fonts/**/*', ['fonts']);
   gulp.watch('bower.json', ['wiredep', 'fonts']);
