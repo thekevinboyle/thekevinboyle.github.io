@@ -15,19 +15,12 @@ var browserify = require('browserify');
 var sass = require('gulp-sass');
 
 gulp.task('stylesheet', ['sprites'], function () {
-    gulp.src('app/**/*.scss')
-      .pipe(sass().on('error', sass.logError))
-      .pipe(gulp.dest('app.stylehsheets'))
-    //.pipe(reload({stream: true}));
+    gulp.src('app/scss/main.scss')
+      .pipe(sass())
+      .pipe(gulp.dest('app/stylesheets'))
+      .pipe(reload({stream: true}));
 });
 
-
-gulp.task('sass', function () {
-      gulp.src('./sass/**/*.scss')
-          .pipe(sass().on('error', sass.logError))
-              .pipe(gulp.dest('./css'));
-
-});
 
 gulp.task('sprites', function() {
   var spritesPath = 'app/images/sprites';
