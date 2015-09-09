@@ -1,187 +1,184 @@
-/*global -$ */
-'use strict';
-// generated on 2015-07-18 using generator-modern-frontend 0.1.7
-var fs = require('fs');
-var path = require('path');
+// Generated on 2015-09-05 using generator-jekyllized 0.7.3
+"use strict";
 
-var gulp = require('gulp');
-var $ = require('gulp-load-plugins')();
-var browserSync = require('browser-sync');
+var gulp = require("gulp");
+// Loads the plugins without having to list all of them, but you need
+// to call them as $.pluginname
+var $ = require("gulp-load-plugins")();
+// "del" is used to clean out directories and such
+var del = require("del");
+// BrowserSync isn"t a gulp package, and needs to be loaded manually
+var browserSync = require("browser-sync");
+// merge is used to merge the output from two different streams into the same stream
+var merge = require("merge-stream");
+// Need a command for reloading webpages using BrowserSync
 var reload = browserSync.reload;
+// And define a variable that BrowserSync uses in it"s function
+var bs;
 
-var through2 = require('through2');
-var browserify = require('browserify');
+// Deletes the directory that is used to serve the site during development
+gulp.task("clean:dev", del.bind(null, ["serve"]));
 
-var sass = require('gulp-sass');
+// Deletes the directory that the optimized site is output to
+gulp.task("clean:prod", del.bind(null, ["site"]));
 
-gulp.task('stylesheet', ['sprites'], function () {
-    gulp.src('app/scss/main.scss')
-      .pipe(sass())
-      .pipe(gulp.dest('app/stylesheets'))
-      .pipe(reload({stream: true}));
+// Runs the build command for Jekyll to compile the site locally
+// This will build the site with the production settings
+gulp.task("jekyll:dev", $.shell.task("jekyll build"));
+gulp.task("jekyll-rebuild", ["jekyll:dev"], function () {
+  reload;
 });
 
+// Almost identical to the above task, but instead we load in the build configuration
+// that overwrites some of the settings in the regular configuration so that you
+// don"t end up publishing your drafts or future posts
+gulp.task("jekyll:prod", $.shell.task("jekyll build --config _config.yml,_config.build.yml"));
 
-gulp.task('sprites', function() {
-  var spritesPath = 'app/images/sprites';
-  var identifiers = fs.readdirSync(spritesPath).filter(function(spritePath) {
-    var stat = fs.statSync(spritesPath + '/' + spritePath);
-    return stat.isDirectory();
-  });
-
-  for (var i = 0; i < identifiers.length; i++) {
-    var spriteData = gulp.src(spritesPath + '/' + identifiers[i] + '/*.png').pipe($.spritesmith({
-      imgName: 'sprite_' + identifiers[i] + '.png',
-      cssName: identifiers[i] + '..scss',
-      imgPath: '../images/sprite_' + identifiers[i] + '.png',
-      cssFormat: 'sass'
-    }));
-
-    // Pipe image stream
-    spriteData.img
-      .pipe(gulp.dest('.tmp/images'))
-      .pipe(gulp.dest('dist/images'))
-
-    // Pipe CSS stream
-    spriteData.css
-      .pipe(gulp.dest('app/scss/sprites'));
-  }
+// Compiles the SASS files and moves them into the "assets/stylesheets" directory
+gulp.task("styles", function () {
+  // Looks at the style.scss file for what to include and creates a style.css file
+  return gulp.src("src/assets/scss/style.scss")
+    .pipe($.sass())
+    // AutoPrefix your CSS so it works between browsers
+    .pipe($.autoprefixer("last 1 version", { cascade: true }))
+    // Directory your CSS file goes to
+    .pipe(gulp.dest("src/assets/stylesheets/"))
+    .pipe(gulp.dest("serve/assets/stylesheets/"))
+    // Outputs the size of the CSS file
+    .pipe($.size({title: "styles"}))
+    // Injects the CSS changes to your browser since Jekyll doesn"t rebuild the CSS
+    .pipe(reload({stream: true}));
 });
 
-gulp.task('javascript', function () {
-  return gulp.src('app/js/main.js')
-    .pipe(through2.obj(function (file, enc, next){ // workaround for https://github.com/babel/babelify/issues/46
-      browserify(file.path)
-      .transform('babelify')
-      .transform('envify')
-      .bundle(function(err, res){
-        if (err) { return next(err); }
-
-        file.contents = res;
-        next(null, file);
-      });
-    }))
-    .on('error', function (error) {
-      console.log(error.stack);
-      this.emit('end');
-    })
-    .pipe(gulp.dest('dist/js'))
-    .pipe($.sourcemaps.init())
-    // .pipe($.uglify())
-    .pipe($.sourcemaps.write('.'))
-    .pipe(gulp.dest('.tmp/js'));
-});
-
-gulp.task('jshint', function () {
-  return gulp.src('app/js/**/*.js')
-    .pipe(reload({stream: true, once: true}))
-    .pipe($.jshint())
-    .pipe($.jshint.reporter('jshint-stylish'))
-    .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
-});
-
-gulp.task('html', ['stylesheet'], function () {
-  var assets = $.useref.assets({searchPath: ['.tmp', 'app/*.html', '.']});
-
-  return gulp.src('app/*.html')
-    .pipe(assets)
-    .pipe($.if('*.js', $.uglify()))
-    .pipe($.if('*.css', $.csso()))
-    .pipe(assets.restore())
-    .pipe($.useref())
-    .pipe($.if('*.html', $.minifyHtml({conditionals: true, loose: true})))
-    .pipe(gulp.dest('dist'));
-});
-
-gulp.task('images', function () {
-  return gulp.src('app/images/**/*')
-    .pipe($.cache($.imagemin({
+// Optimizes the images that exists
+gulp.task("images", function () {
+  return gulp.src("src/assets/images/**")
+    .pipe($.changed("site/assets/images"))
+    .pipe($.imagemin({
+      // Lossless conversion to progressive JPGs
       progressive: true,
-      interlaced: true,
-      // don't remove IDs from SVGs, they are often used
-      // as hooks for embedding and styling
-      svgoPlugins: [{cleanupIDs: false}]
+      // Interlace GIFs for progressive rendering
+      interlaced: true
+    }))
+    .pipe(gulp.dest("site/assets/images"))
+    .pipe($.size({title: "images"}));
+});
+
+// Copy over fonts to the "site" directory
+gulp.task("fonts", function () {
+  return gulp.src("src/assets/fonts/**")
+    .pipe(gulp.dest("site/assets/fonts"))
+    .pipe($.size({ title: "fonts" }));
+});
+
+// Copy xml and txt files to the "site" directory
+gulp.task("copy", function () {
+  return gulp.src(["serve/*.txt", "serve/*.xml"])
+    .pipe(gulp.dest("site"))
+    .pipe($.size({ title: "xml & txt" }))
+});
+
+// Optimizes all the CSS, HTML and concats the JS etc
+gulp.task("html", ["styles"], function () {
+  var assets = $.useref.assets({searchPath: "serve"});
+
+  return gulp.src("serve/**/*.html")
+    .pipe(assets)
+    // Concatenate JavaScript files and preserve important comments
+    .pipe($.if("*.js", $.uglify({preserveComments: "some"})))
+    // Minify CSS
+    .pipe($.if("*.css", $.minifyCss()))
+    // Start cache busting the files
+    .pipe($.revAll({ ignore: [".eot", ".svg", ".ttf", ".woff"] }))
+    .pipe(assets.restore())
+    // Conctenate your files based on what you specified in _layout/header.html
+    .pipe($.useref())
+    // Replace the asset names with their cache busted names
+    .pipe($.revReplace())
+    // Minify HTML
+    .pipe($.if("*.html", $.htmlmin({
+      removeComments: true,
+      removeCommentsFromCDATA: true,
+      removeCDATASectionsFromCDATA: true,
+      collapseWhitespace: true,
+      collapseBooleanAttributes: true,
+      removeAttributeQuotes: true,
+      removeRedundantAttributes: true
     })))
-    .pipe(gulp.dest('dist/images'));
+    // Send the output to the correct folder
+    .pipe(gulp.dest("site"))
+    .pipe($.size({title: "optimizations"}));
 });
 
-gulp.task('fonts', function () {
-  return gulp.src(require('main-bower-files')({
-    filter: '**/*.{eot,svg,ttf,woff,woff2}'
-  }).concat('app/fonts/**/*'))
-    .pipe(gulp.dest('.tmp/fonts'))
-    .pipe(gulp.dest('dist/fonts'));
+
+// Task to upload your site to your personal GH Pages repo
+gulp.task("deploy", function () {
+  // Deploys your optimized site, you can change the settings in the html task if you want to
+  return gulp.src("./site/**/*")
+    .pipe($.ghPages({
+      // Currently only personal GitHub Pages are supported so it will upload to the master
+      // branch and automatically overwrite anything that is in the directory
+      branch: "master"
+      }));
 });
 
-gulp.task('extras', function () {
-  return gulp.src([
-    'app/*.*',
-    '!app/*.html'
-  ], {
-    dot: true
-  }).pipe(gulp.dest('dist'));
+// Run JS Lint against your JS
+gulp.task("jslint", function () {
+  gulp.src("./serve/assets/javascript/*.js")
+    // Checks your JS code quality against your .jshintrc file
+    .pipe($.jshint(".jshintrc"))
+    .pipe($.jshint.reporter());
 });
 
-gulp.task('clean', require('del').bind(null, ['.tmp', 'dist']));
+// Runs "jekyll doctor" on your site to check for errors with your configuration
+// and will check for URL errors a well
+gulp.task("doctor", $.shell.task("jekyll doctor"));
 
-gulp.task('serve', ['stylesheet', 'javascript', 'fonts'], function () {
-  browserSync({
-    notify: false,
-    port: 9000,
+// BrowserSync will serve our site on a local server for us and other devices to use
+// It will also autoreload across all devices as well as keep the viewport synchronized
+// between them.
+gulp.task("serve:dev", ["styles", "jekyll:dev"], function () {
+  bs = browserSync({
+    notify: true,
+    // tunnel: "",
     server: {
-      baseDir: ['.tmp', 'app'],
-      routes: {
-        '/bower_components': 'bower_components'
-      }
-    }
-  });
-
-  // watch for changes
-  gulp.watch([
-    'app/*.html',
-    '.tmp/js/*.js',
-    'app/images/**/*',
-    '.tmp/fonts/**/*'
-  ]).on('change', reload);
-
-  gulp.watch(['app/scss/**/*.scss', '!app/scss/sprites/*.scss'], ['stylesheet']);
-  gulp.watch('app/js/**/*.js', ['javascript']);
-  gulp.watch('app/fonts/**/*', ['fonts']);
-  gulp.watch('bower.json', ['wiredep', 'fonts']);
-});
-
-gulp.task('serve:dist', function () {
-  browserSync({
-    notify: false,
-    port: 9000,
-    server: {
-      baseDir: ['dist']
+      baseDir: "serve"
     }
   });
 });
 
-// inject bower components
-gulp.task('wiredep', function () {
-  var wiredep = require('wiredep').stream;
-
-  gulp.src('app/css/*.scss')
-    .pipe(wiredep({
-      ignorePath: /^(\.\.\/)+/
-    }))
-    .pipe(gulp.dest('app/css'));
-
-  gulp.src('app/*.html')
-    .pipe(wiredep({
-      // exclude: ['bootstrap-sass-official'],
-      ignorePath: /^(\.\.\/)*\.\./
-    }))
-    .pipe(gulp.dest('app'));
+// These tasks will look for files that change while serving and will auto-regenerate or
+// reload the website accordingly. Update or add other files you need to be watched.
+gulp.task("watch", function () {
+  gulp.watch(["src/**/*.md", "src/**/*.html", "src/**/*.xml", "src/**/*.txt", "src/**/*.js"], ["jekyll-rebuild"]);
+  gulp.watch(["serve/assets/stylesheets/*.css"], reload);
+  gulp.watch(["src/assets/scss/**/*.scss"], ["styles"]);
 });
 
-gulp.task('build', ['jshint', 'javascript', 'stylesheet', 'html', 'images', 'fonts', 'extras'], function () {
-  return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
+// Serve the site after optimizations to see that everything looks fine
+gulp.task("serve:prod", function () {
+  bs = browserSync({
+    notify: false,
+    // tunnel: true,
+    server: {
+      baseDir: "site"
+    }
+  });
 });
 
-gulp.task('default', ['clean'], function () {
-  gulp.start('build');
+// Default task, run when just writing "gulp" in the terminal
+gulp.task("default", ["serve:dev", "watch"]);
+
+// Checks your CSS, JS and Jekyll for errors
+gulp.task("check", ["jslint", "doctor"], function () {
+  // Better hope nothing is wrong.
+});
+
+// Builds the site but doesn"t serve it to you
+gulp.task("build", ["jekyll:prod", "styles"], function () {});
+
+// Builds your site with the "build" command and then runs all the optimizations on
+// it and outputs it to "./site"
+gulp.task("publish", ["build"], function () {
+  gulp.start("html", "copy", "images", "fonts");
 });
