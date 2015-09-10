@@ -6,7 +6,48 @@ The main SCSS file for everything, yep
 //@import "syntax";
 //@import "lanyon";
 
+@import "normalize";
 @import "grid";
 
 body {
+  border-top: 1rem solid #232323;
+  color: #282828;
+}
+.wrapper {
+    margin: 0 auto;
+    max-width: 40rem;
+    width: 90%;
+}
+a {
+    text-decoration: none;
+    color: #2A8FBD;
+    font-weight: 400
+}
+
+a:hover {
+    color: #030303;
+    background: linear-gradient(to bottom, transparent 0%, transparent 54%, #232323 55%, #232323 100%);
+    border-bottom: 0.1em solid #A9E8FA
+}
+
+h1 {
+    font-weight: 400;
+    font-size: 1.75em;
+    margin: 1em 0
+}
+
+h2 {
+    font-size: 1.25em;
+    font-weight: 300;
+    color: #999999;
+    margin-top: 0.625em;
+    margin-bottom: 0.625em
+}
+
+h3 {
+    font-size: 1.125em;
+    font-weight: 300;
+    color: #999999;
+    margin-top: 0.625em;
+    margin-bottom: 0.625em
 }

@@ -1,5 +1,7 @@
 {
   "name": "kb2",
   "version": "0.0.0",
-  "dependencies": {}
+  "dependencies": {
+    "normalize-css": "normalize.css#~3.0.3"
+  }
 }
