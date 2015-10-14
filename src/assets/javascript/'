@@ -1,0 +1,43 @@
+;
+(function($, root, undefined) {
+
+    $(function() {
+
+        'use strict';
+
+        // DOM ready
+        $(window).load(function() {
+            cloneDiv();
+            generateRandomColor();
+            $('.shoe').on('click', addToCart);
+        });
+
+        function generateRandomColor() {
+            function color() {
+                return Math.floor(Math.random() * 256).toString(16);
+            }
+            var theRandomColor = '#' + color() + color() + color();
+            return theRandomColor;
+        }
+
+        function addToCart() {
+            // $('.shoe__shelf').find('.shoe').fadeOut();
+            $(this).detach();
+        }
+
+        function cloneDiv() {
+            for (var i = 0; i < 12; i++) {
+                var $shoe = $('.shoe__temp').find('.shoe').clone();
+                $shoe.appendTo('.shoe__shelf');
+
+                $shoe.find('.shoe__body').css('fill', generateRandomColor());
+            }
+
+            $('.shoe:even').css('background', '#7f8c8d');
+            $('.shoe__temp').remove();
+
+        }
+
+    });
+
+})(jQuery, this);

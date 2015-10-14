@@ -1,83 +1,60 @@
-;(function ($, root, undefined) {
+;
+(function($, root, undefined) {
 
-  $(function () {
+    $(function() {
 
-    'use strict';
+        'use strict';
 
-    // DOM ready
+        // DOM ready
+        $(window).load(function() {
+            cloneDiv();
+            generateRandomColor();
+            $('.shoe__shelf').find('.shoe').on('click', addToCart);
+            $('.shoe__cart').find('.shoe').on('click', removeFromCart);
 
-    $(window).load(function(){
-      // Stuff that needs to happen after things are rendered
+            $('.lottery__container').find('.lottery__col__ball').on('click', rearrangeBall);
 
-      var counter = 0;
-
-      var targetInterval;
-
-      function randomPosition() {
-        var $target = $('.theBoard__target');
-        var $theBoard = $('.theBoard');
-
-
-        $target.fadeOut(800, function() {
-          var maxLeft = $theBoard.width() - $target.width();
-          var maxTop = $theBoard.height() - $target.height();
-          var leftPos = Math.floor(Math.random() * (maxLeft + 1));
-          var topPos = Math.floor(Math.random() * (maxTop + 1));
-
-          $target.css({
-            left: leftPos,
-            top: topPos
-
-          })
-
-          .fadeIn(100);
         });
-      }
 
-      function winTrumpBg() {
-        $('body').addClass('trumpBg');
-        $('.container').toggle('drop');
-      }
-
-      function win() {
-
-        $('.youWin').html('YOU WIN');
-        $('.theBoard__scoreBoard').html(counter);
-        $('.theBoard__target').off( 'click', onTargetClick );
-        clearInterval(targetInterval);
-        winTrumpBg();
-      }
-
-
-      function onTargetClick() {
-        counter++ ;
-
-        if(counter === 10) {
-          win();
-        } else {
-          $('.theBoard__scoreBoard').html(counter);
-
+        function generateRandomColor() {
+            function color() {
+                return Math.floor(Math.random() * 256).toString(16);
+            }
+            var theRandomColor = '#' + color() + color() + color();
+            return theRandomColor;
         }
 
-      }
-
-      $('.theBoard__target').on( 'click', onTargetClick );
-
-
-      $(document).on('keydown', function(e) {
-
-        if (e.keyCode == 72) {
-          // press the letter H
-          win();
+        function rearrangeBall() {
+          $(this).detach();
+          $(this).appendTo('.lottery__col');
         }
-        return true;
-      })
 
-      randomPosition();
-      targetInterval = setInterval(randomPosition, 100);
+
+        function addToCart() {
+          // $('.shoe__shelf').find('.shoe').fadeOut();
+          $(this).detach('.shoe');
+          $(this).appendTo('.shoe__cart');
+        }
+
+        function removeFromCart() {
+          // $('.shoe__shelf').find('.shoe').fadeOut();
+          $(this).detach();
+          $(this).appendTo('.shoe__shelf');
+        }
+
+        function cloneDiv() {
+          for (var i = 0; i < 12; i++) {
+            var $shoe = $('.shoe__temp').find('.shoe').clone();
+            $shoe.appendTo('.shoe__box');
+
+            $shoe.find('.shoe__body').css('fill', generateRandomColor());
+          }
+
+          // $('.shoe:even').css('background', '#7f8c8d');
+          $('.shoe__temp').remove();
+
+        }
 
     });
 
-
-  });
 })(jQuery, this);

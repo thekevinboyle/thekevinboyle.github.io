@@ -61,82 +61,92 @@ img {
   height: auto; }
 
 /* b) Mixins */
-/* colors */
-.concrete {
-  background-color: #95a5a6; }
+body {
+  background-color: #282830; }
 
-.purple {
-  background-color: #9b59b6; }
-
-.clouds {
-  background-color: #ecf0f1; }
-
-.red {
-  background-color: #d35400; }
-
-.dk-purple {
-  background-color: #8e44ad; }
-
-.containter {
-  clear: both;
-  margin: 0 auto;
-  padding: 0; }
-
-/* The Bear */
-/* The Board */
-.theBoard {
-  height: 800px;
-  width: 800px;
-  margin: 100px auto;
+.container {
+  height: 100%;
+  margin: 10px auto;
+  text-align: center;
+  max-width: 1080px;
   position: relative; }
 
-.theBoard__target {
-  border-radius: 50%;
-  background-image: url("http://lovelace-media.imgix.net/uploads/25/378bc2a0-4376-0133-9d86-0af7184f89fb.gif?");
-  background-size: cover;
-  background-position: center;
-  font-family: Helvetica;
-  font-size: 16px;
-  height: 100px;
-  left: 350px;
-  position: absolute;
-  text-align: center;
-  top: 350px;
-  width: 100px; }
+.clouds {
+  background-color: #95a5a6; }
 
-.theBoard__scoreBoard {
-  color: #34495e;
+.dk_clouds {
+  background-color: #7f8c8d; }
+
+.purpleish {
+  background-color: #343557; }
+
+.electric__blue {
+  background-color: #31D6CE; }
+
+.electric__green {
+  background-color: #C2ED6C; }
+
+.pale__cream {
+  background-color: #F6EDA2; }
+
+.pale__rose {
+  background-color: #F7BA92; }
+
+.sunflower {
+  background-color: #f1c40f; }
+
+.shoe {
+  display: inline-block;
+  height: 200px;
+  padding-top: 130px;
+  width: 200px; }
+
+.shoe__shelf {
+  background-color: #95a5a6;
+  height: 100%;
+  margin: 0 auto;
+  max-width: 600px;
+  min-width: 600px;
+  min-height: 800px; }
+
+.shoe__box {
+  background-color: #95a5a6;
+  height: 100%;
+  margin: 0 auto;
+  min-width: 200px; }
+
+.shoe__cart {
+  background-color: #1DABB8;
+  height: 200px;
+  width: 100%;
+  position: fixed;
+  bottom: 0; }
+
+.lottery__container {
+  height: 100%;
+  margin: 0  auto;
+  margin-bottom: 400px;
+  margin-top: 400px;
+  text-align: center;
+  max-width: 400px;
+  position: relative; }
+
+.lottery__col {
+  height: 100%;
+  margin: 0 auto;
+  padding: 10px;
+  position: relative;
+  width: 150px; }
+
+.lottery__col__ball {
+  border-radius: 50%;
+  color: #333333;
   font-family: Helvetica;
   font-size: 36px;
   height: 80px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  margin-top: 10px;
   padding-top: 20px;
-  position: absolute;
-  right: 0;
   text-align: center;
-  top: 0;
-  width: 100px; }
-
-.theBoard__marquee {
-  color: #34495e;
-  font-family: Helvetica;
-  font-size: 24px;
-  position: absolute;
-  left: 0;
-  top: 0;
-  margin-left: 20px;
-  margin-top: 20px; }
-
-.trumpBg {
-  background-image: url("http://lovelace-media.imgix.net/uploads/25/378bc2a0-4376-0133-9d86-0af7184f89fb.gif?");
-  background-size: cover; }
-
-.youWin {
-  color: #e74c3c;
-  font-family: Helvetica;
-  font-size: 64px;
-  left: 50%;
-  position: absolute;
-  top: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-      -ms-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%); }
+  width: 80px; }
