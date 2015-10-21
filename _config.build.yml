@@ -3,7 +3,7 @@
 
 # Overrides the default URL, needed for your atom feed and sitemap
 url: thekevinboyle.github.io
-# baseurl: serve
+baseurl: serve
 
 # Hides your drafts and future posts
 future: false
